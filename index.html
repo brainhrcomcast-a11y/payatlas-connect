@@ -8,6 +8,7 @@
 <title>DA: PayAtlas</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 
 <style>
 
@@ -408,9 +409,35 @@ home.style.display="block";
 
 
 
-function connectWallet(){
+let tonConnectUI;
 
-alert("TON Connect будет подключен следующим шагом");
+
+async function connectWallet(){
+
+try{
+
+if(!tonConnectUI){
+
+tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+
+manifestUrl:
+"https://brainhrcomcast-a11y.github.io/payatlas-connect/tonconnect-manifest.json"
+
+});
+
+}
+
+
+await tonConnectUI.openModal();
+
+
+}catch(e){
+
+console.log(e);
+
+alert("Ошибка подключения кошелька");
+
+}
 
 }
 
