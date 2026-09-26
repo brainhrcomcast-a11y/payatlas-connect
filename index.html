@@ -1,40 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>DA: PayAtlas</title>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+<div id="payatlas-app">
 
 <style>
+
+#payatlas-app{
+font-family:Inter,system-ui,sans-serif;
+background:#050505;
+color:#E5E5E5;
+min-height:100vh;
+padding:18px;
+box-sizing:border-box;
+}
+
 
 *{
 box-sizing:border-box;
 }
 
-body{
-margin:0;
-background:#050505;
-color:#E5E5E5;
-font-family:Inter,Arial,sans-serif;
-}
-
-#app{
-padding:16px;
-}
 
 
-/* HEADER */
+/* ================= HEADER ================= */
 
-.header{
+
+.payatlas-header{
 
 display:flex;
 justify-content:space-between;
 align-items:center;
+
+width:100%;
+
+margin-bottom:24px;
+
+}
+
+
+
+.payatlas-profile-btn{
+
+display:flex;
+align-items:center;
+gap:10px;
+
+height:48px;
+
+padding:0 18px 0 8px;
 
 background:#090909;
 
@@ -42,54 +51,88 @@ border:1px solid rgba(255,255,255,.12);
 
 border-radius:24px;
 
-padding:12px;
+cursor:pointer;
 
 }
 
 
-.profile-btn,
-.wallet-btn{
 
-height:48px;
-
-display:flex;
-
-align-items:center;
-
-gap:10px;
-
-padding:0 18px;
-
-background:#0d0d0d;
-
-border:1px solid rgba(255,255,255,.12);
-
-border-radius:24px;
-
-color:white;
-
-font-size:15px;
-
-}
-
-
-.avatar{
+.payatlas-avatar{
 
 width:34px;
 height:34px;
 
 border-radius:50%;
 
-border:1px solid #C89B3C;
-
-object-fit:cover;
+overflow:hidden;
 
 background:#111;
+
+border:1px solid #C89B3C;
 
 }
 
 
-.dot{
+
+.payatlas-avatar img{
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+}
+
+
+
+.payatlas-name{
+
+font-size:14px;
+
+color:#E5E5E5;
+
+}
+
+
+
+.payatlas-arrow{
+
+color:#C89B3C;
+
+font-size:20px;
+
+}
+
+
+
+.payatlas-wallet{
+
+height:48px;
+
+padding:0 20px;
+
+display:flex;
+align-items:center;
+gap:10px;
+
+
+background:#090909;
+
+border:1px solid rgba(255,255,255,.12);
+
+border-radius:24px;
+
+color:#E5E5E5;
+
+cursor:pointer;
+
+font-size:14px;
+
+}
+
+
+
+.wallet-dot{
 
 width:8px;
 height:8px;
@@ -98,66 +141,36 @@ background:#C89B3C;
 
 border-radius:50%;
 
-box-shadow:0 0 12px #C89B3C;
+box-shadow:
+0 0 12px rgba(200,155,60,.7);
 
 }
 
 
 
-/* HOME */
 
-.card{
 
-margin-top:18px;
+/* ================= SCREEN SYSTEM ================= */
 
-background:#080808;
 
-border:1px solid rgba(255,255,255,.12);
+.payatlas-screen{
 
-border-radius:24px;
-
-padding:22px;
+display:block;
 
 }
 
 
-.title{
-
-text-align:center;
-
-font-size:28px;
-
-margin:20px 0;
-
-}
-
-
-.subtitle{
-
-text-align:center;
-
-color:#777;
-
-}
-
-
-
-/* PROFILE */
-
-#profile{
+#payatlas-profile-screen{
 
 display:none;
 
 }
 
 
-.back{
 
-color:#C89B3C;
 
-margin-bottom:20px;
 
-}
+/* ================= PROFILE ================= */
 
 
 .profile-card{
@@ -173,9 +186,29 @@ padding:24px;
 }
 
 
-.big-avatar{
+
+.profile-back{
+
+background:none;
+
+border:none;
+
+color:#C89B3C;
+
+font-size:15px;
+
+cursor:pointer;
+
+margin-bottom:20px;
+
+}
+
+
+
+.profile-avatar{
 
 width:90px;
+
 height:90px;
 
 border-radius:50%;
@@ -187,11 +220,32 @@ object-fit:cover;
 }
 
 
-.item{
 
-height:55px;
+.profile-name{
+
+font-size:26px;
+
+margin-top:18px;
+
+}
+
+
+
+.profile-info{
+
+color:#777;
 
 margin-top:12px;
+
+font-size:14px;
+
+}
+
+
+
+.profile-block{
+
+height:58px;
 
 border:1px solid rgba(255,255,255,.12);
 
@@ -203,68 +257,782 @@ align-items:center;
 
 padding-left:20px;
 
+margin-top:12px;
+
 color:#aaa;
 
 }
 
+
+
+/* ================= RESPONSIVE ================= */
+
+
+@media(max-width:600px){
+
+
+#payatlas-app{
+
+padding:14px;
+
+}
+
+
+.payatlas-wallet{
+
+padding:0 14px;
+
+}
+
+
+.payatlas-name{
+
+font-size:13px;
+
+}
+
+}
+
+
 </style>
 
-</head>
 
 
-<body>
+<!-- ================= HEADER ================= -->
 
 
-<div id="app">
+<div class="payatlas-header">
 
 
-<div class="header">
+<div 
+class="payatlas-profile-btn"
+onclick="payatlasOpenProfile()"
+>
 
 
-<div class="profile-btn" onclick="openProfile()">
+<div class="payatlas-avatar">
 
-<img class="avatar" id="avatar">
+<img id="payatlas-tg-avatar">
 
-<span id="username">
+</div>
+
+
+<span 
+class="payatlas-name"
+id="payatlas-tg-name">
+
 Loading...
+
 </span>
+
+
+<span class="payatlas-arrow">
+
+›
+
+</span>
+
 
 </div>
 
 
 
-<div class="wallet-btn" onclick="connectWallet()">
+<div 
+class="payatlas-wallet"
+onclick="payatlasConnectWallet()"
+>
 
-<div class="dot"></div>
+
+<div class="wallet-dot"></div>
+
+
+<span id="payatlas-wallet-text">
 
 Connect Wallet
 
-</div>
+</span>
 
 
 </div>
 
 
-
-<div id="home">
-
-
-<div class="card">
-
-
-<div class="subtitle">
-DA: PAYATLAS
 </div>
 
 
-<div class="title">
+
+
+
+<!-- ================= HOME SCREEN ================= -->
+
+
+<div 
+id="payatlas-home-screen"
+class="payatlas-screen">
+
+
+<div id="payatlas-home-screen">
+
+<style>
+
+
+/* ================= SYSTEM MAP ================= */
+
+
+.payatlas-core{
+
+position:relative;
+
+width:min(72vw,280px);
+
+aspect-ratio:1;
+
+margin:50px auto 55px;
+
+display:grid;
+
+place-items:center;
+
+}
+
+
+
+.payatlas-core::before,
+.payatlas-core::after{
+
+content:"";
+
+position:absolute;
+
+border-radius:50%;
+
+border:1px solid rgba(255,255,255,.12);
+
+}
+
+
+
+.payatlas-core::before{
+
+inset:12%;
+
+animation:
+orbitOuter 60s linear infinite;
+
+box-shadow:
+0 0 40px rgba(200,155,60,.08);
+
+}
+
+
+
+.payatlas-core::after{
+
+inset:0;
+
+transform:scaleX(.7);
+
+animation:
+orbitMiddle 45s linear infinite reverse;
+
+}
+
+
+
+.payatlas-inner-orbit{
+
+position:absolute;
+
+inset:7%;
+
+border-radius:50%;
+
+border:1px solid rgba(255,255,255,.08);
+
+transform:scaleY(.6);
+
+animation:
+orbitInner 30s linear infinite;
+
+}
+
+
+
+.payatlas-node{
+
+width:10px;
+
+height:10px;
+
+border-radius:50%;
+
+background:#C89B3C;
+
+box-shadow:
+0 0 20px rgba(200,155,60,.6);
+
+animation:
+pulseNode 3s infinite;
+
+}
+
+
+
+.payatlas-core-label{
+
+position:absolute;
+
+top:58%;
+
+font-size:9px;
+
+letter-spacing:.22em;
+
+color:#666;
+
+}
+
+
+
+.system-tag{
+
+position:absolute;
+
+font-size:9px;
+
+letter-spacing:.18em;
+
+color:#666;
+
+}
+
+
+
+.tag-node{
+
+top:10%;
+right:0;
+
+}
+
+
+
+.tag-core{
+
+bottom:10%;
+left:0;
+
+}
+
+
+
+.tag-sync{
+
+left:-5%;
+top:48%;
+
+}
+
+
+
+
+@keyframes orbitOuter{
+
+from{
+
+transform:rotate(0deg);
+
+}
+
+to{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+
+
+@keyframes orbitMiddle{
+
+from{
+
+transform:rotate(0deg) scaleX(.7);
+
+}
+
+to{
+
+transform:rotate(360deg) scaleX(.7);
+
+}
+
+}
+
+
+
+@keyframes orbitInner{
+
+from{
+
+transform:rotate(0deg) scaleY(.6);
+
+}
+
+to{
+
+transform:rotate(360deg) scaleY(.6);
+
+}
+
+}
+
+
+
+@keyframes pulseNode{
+
+50%{
+
+opacity:.5;
+
+}
+
+}
+
+
+
+
+/* ================= PANELS ================= */
+
+
+.payatlas-panels{
+
+display:grid;
+
+grid-template-columns:
+repeat(3,1fr);
+
+gap:12px;
+
+}
+
+
+
+.payatlas-panel{
+
+background:#080808;
+
+border:
+
+1px solid rgba(255,255,255,.12);
+
+border-radius:18px;
+
+padding:16px;
+
+min-height:140px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:space-between;
+
+}
+
+
+
+.payatlas-panel-title{
+
+font-size:13px;
+
+letter-spacing:.14em;
+
+}
+
+
+
+.payatlas-panel-sub{
+
+font-size:11px;
+
+color:#666;
+
+margin-top:8px;
+
+line-height:1.5;
+
+}
+
+
+
+.payatlas-tags{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:6px;
+
+margin-top:14px;
+
+}
+
+
+
+.payatlas-tag{
+
+font-size:9px;
+
+color:#777;
+
+border-bottom:1px solid rgba(255,255,255,.12);
+
+padding-bottom:3px;
+
+}
+
+
+
+.payatlas-action{
+
+color:#C89B3C;
+
+font-size:10px;
+
+letter-spacing:.18em;
+
+}
+
+
+
+
+/* ================= VAULT ================= */
+
+
+.vault-app{
+
+margin-top:35px;
+
+background:#080808;
+
+border:
+
+1px solid rgba(255,255,255,.12);
+
+border-radius:24px;
+
+padding:22px;
+
+}
+
+
+
+.vault-label{
+
+font-size:10px;
+
+letter-spacing:.22em;
+
+color:#666;
+
+}
+
+
+
+.vault-title{
+
+font-size:24px;
+
+margin-top:15px;
+
+}
+
+
+
+.vault-subtitle{
+
+font-size:13px;
+
+color:#666;
+
+margin-top:8px;
+
+margin-bottom:25px;
+
+}
+
+
+
+.vault-zone{
+
+display:grid;
+
+grid-template-columns:250px 1fr;
+
+gap:18px;
+
+}
+
+
+
+.vault-files{
+
+display:flex;
+
+flex-direction:column;
+
+gap:10px;
+
+}
+
+
+
+.vault-file{
+
+background:#050505;
+
+border:
+
+1px solid rgba(255,255,255,.12);
+
+border-radius:16px;
+
+padding:15px;
+
+cursor:pointer;
+
+}
+
+
+
+.vault-file.active{
+
+border-color:#C89B3C;
+
+}
+
+
+
+.vault-number{
+
+font-size:9px;
+
+color:#666;
+
+}
+
+
+
+.vault-name{
+
+display:block;
+
+margin-top:8px;
+
+font-size:12px;
+
+}
+
+
+
+.vault-status{
+
+font-size:10px;
+
+color:#666;
+
+margin-top:8px;
+
+}
+
+
+
+.vault-preview{
+
+border:
+
+1px solid rgba(255,255,255,.12);
+
+border-radius:18px;
+
+padding:20px;
+
+background:#050505;
+
+}
+
+
+
+.vault-preview-title{
+
+font-size:18px;
+
+}
+
+
+
+.vault-preview-text{
+
+margin-top:15px;
+
+font-size:13px;
+
+line-height:1.7;
+
+color:#888;
+
+}
+
+
+
+@media(max-width:700px){
+
+
+.payatlas-panels{
+
+grid-template-columns:1fr;
+
+}
+
+
+.vault-zone{
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+}
+
+
+</style>
+
+
+
+
+<!-- SYSTEM MAP -->
+
+
+<div class="payatlas-core">
+
+
+<div class="payatlas-inner-orbit"></div>
+
+
+<div class="payatlas-node"></div>
+
+
+<span class="system-tag tag-node">
+NODE
+</span>
+
+
+<span class="system-tag tag-core">
+CORE
+</span>
+
+
+<span class="system-tag tag-sync">
+SYNC
+</span>
+
+
+<div class="payatlas-core-label">
 SYSTEM MAP
 </div>
 
 
-<p style="text-align:center;color:#777">
-Orbit module loading...
-</p>
+</div>
+
+
+
+
+
+<!-- MODULES -->
+
+
+<div class="payatlas-panels">
+
+
+<div class="payatlas-panel">
+
+<div>
+
+<div class="payatlas-panel-title">
+OBMEN
+</div>
+
+<div class="payatlas-panel-sub">
+crypto / fiat / flow
+</div>
+
+
+<div class="payatlas-tags">
+
+<span class="payatlas-tag">
+USDT
+</span>
+
+<span class="payatlas-tag">
+BTC
+</span>
+
+<span class="payatlas-tag">
+ETH
+</span>
+
+<span class="payatlas-tag">
+RUB
+</span>
+
+</div>
+
+</div>
+
+
+<div class="payatlas-action">
+ENTER
+</div>
+
+</div>
+
+
+
+
+
+<div class="payatlas-panel">
+
+<div>
+
+<div class="payatlas-panel-title">
+ADVERT
+</div>
+
+
+<div class="payatlas-panel-sub">
+traffic / monetization / systems
+</div>
+
+
+<div class="payatlas-tags">
+
+<span class="payatlas-tag">
+CPA
+</span>
+
+<span class="payatlas-tag">
+PPC
+</span>
+
+<span class="payatlas-tag">
+MEDIA
+</span>
+
+<span class="payatlas-tag">
+API
+</span>
 
 
 </div>
@@ -273,54 +1041,397 @@ Orbit module loading...
 </div>
 
 
+<div class="payatlas-action">
+ACCESS
+</div>
 
-<div id="profile">
+
+</div>
+
+
+
+
+
+<div class="payatlas-panel">
+
+
+<div>
+
+<div class="payatlas-panel-title">
+CONTACT
+</div>
+
+
+<div class="payatlas-panel-sub">
+telegram / direct / update
+</div>
+
+
+<div class="payatlas-tags">
+
+<span class="payatlas-tag">
+T.ME/OBMENSK
+</span>
+
+
+</div>
+
+
+</div>
+
+
+<div class="payatlas-action">
+OPEN TG
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- VAULT -->
+
+
+<div class="vault-app">
+
+
+<div class="vault-label">
+PRIVATE DATA VAULT
+</div>
+
+
+<div class="vault-title">
+Advert beta layer
+</div>
+
+
+<div class="vault-subtitle">
+Selected internal files available for preview
+</div>
+
+
+
+<div class="vault-zone">
+
+
+<div class="vault-files">
+
+
+<div class="vault-file active">
+<span class="vault-number">
+FILE 01
+</span>
+
+<span class="vault-name">
+BETA ACCESS
+</span>
+
+<div class="vault-status">
+ACTIVE
+</div>
+
+</div>
+
+
+
+<div class="vault-file">
+<span class="vault-number">
+FILE 02
+</span>
+
+<span class="vault-name">
+INTERNAL FLOW
+</span>
+
+<div class="vault-status">
+LOCKED PREVIEW
+</div>
+
+</div>
+
+
+
+<div class="vault-file">
+<span class="vault-number">
+FILE 03
+</span>
+
+<span class="vault-name">
+OFFER STACK
+</span>
+
+<div class="vault-status">
+INTERNAL
+</div>
+
+</div>
+
+
+
+<div class="vault-file">
+<span class="vault-number">
+FILE 04
+</span>
+
+<span class="vault-name">
+PRIVATE ONBOARDING
+</span>
+
+<div class="vault-status">
+LOCKED PREVIEW
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+<div class="vault-preview">
+
+
+<div class="vault-preview-title">
+BETA ACCESS
+</div>
+
+
+<div class="vault-preview-text">
+
+Так как направление сейчас находится в стадии beta-масштабирования, первые тестовые и пилотные задачи выполняются через ограниченный круг постоянных клиентов и источники с высоким уровнем доверия.
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+
+
+<!-- ================= PROFILE SCREEN ================= -->
+
+
+<div 
+id="payatlas-profile-screen"
+class="payatlas-screen">
+
+
+<style>
+
+
+.profile-card{
+
+background:#080808;
+
+border:1px solid rgba(255,255,255,.12);
+
+border-radius:24px;
+
+padding:24px;
+
+}
+
+
+
+.profile-back{
+
+background:none;
+
+border:none;
+
+color:#C89B3C;
+
+font-size:14px;
+
+cursor:pointer;
+
+margin-bottom:25px;
+
+}
+
+
+
+.profile-avatar-big{
+
+width:90px;
+
+height:90px;
+
+border-radius:50%;
+
+border:1px solid #C89B3C;
+
+object-fit:cover;
+
+}
+
+
+
+.profile-name-big{
+
+font-size:26px;
+
+margin-top:18px;
+
+}
+
+
+
+.profile-line{
+
+color:#777;
+
+font-size:14px;
+
+margin-top:12px;
+
+}
+
+
+
+.profile-wallet{
+
+color:#C89B3C;
+
+}
+
+
+
+.profile-menu{
+
+margin-top:25px;
+
+}
+
+
+
+.profile-menu-item{
+
+height:58px;
+
+display:flex;
+
+align-items:center;
+
+padding-left:20px;
+
+border-radius:18px;
+
+border:1px solid rgba(255,255,255,.12);
+
+margin-top:12px;
+
+color:#aaa;
+
+}
+
+
+
+</style>
+
+
+
 
 
 <div class="profile-card">
 
 
-<div class="back" onclick="closeProfile()">
+<button 
+class="profile-back"
+onclick="payatlasCloseProfile()">
+
 ← Back
+
+</button>
+
+
+
+
+<img 
+class="profile-avatar-big"
+id="payatlas-profile-avatar">
+
+
+
+
+
+<div 
+class="profile-name-big"
+id="payatlas-profile-name">
+
+Personal Account
+
 </div>
 
 
-<img class="big-avatar" id="bigAvatar">
 
 
-<h1 id="profileName"></h1>
+<div class="profile-line">
 
-
-<p>
 Telegram ID:
-<span id="tgid"></span>
-</p>
 
+<span id="payatlas-profile-id">
 
-<p>
-Wallet:
-<span style="color:#C89B3C">
-Not connected
+---
+
 </span>
-</p>
+
+</div>
 
 
 
-<div class="item">
+
+<div class="profile-line">
+
+Wallet:
+
+<span class="profile-wallet">
+
+Not connected
+
+</span>
+
+</div>
+
+
+
+
+
+<div class="profile-menu">
+
+
+<div class="profile-menu-item">
+
 Balance
+
 </div>
 
 
-<div class="item">
+<div class="profile-menu-item">
+
 Transactions
+
 </div>
 
 
-<div class="item">
+<div class="profile-menu-item">
+
 Settings
-</div>
-
-
 
 </div>
 
@@ -329,68 +1440,146 @@ Settings
 
 
 </div>
+
+
 
 
 
 <script>
 
 
-const tg =
-window.Telegram.WebApp;
+// =============================
+// TELEGRAM USER
+// =============================
 
 
-tg.ready();
-
-
-const user =
-tg.initDataUnsafe?.user;
+const payatlasUser =
+window.Telegram?.WebApp?.initDataUnsafe?.user;
 
 
 
-if(user){
+if(payatlasUser){
 
 
-document.getElementById("username").innerText =
-user.username
+const username =
+
+payatlasUser.username
+
 ?
-"@" + user.username
+
+"@" + payatlasUser.username
+
 :
-user.first_name;
+
+payatlasUser.first_name;
 
 
 
-if(user.photo_url){
+document
+.getElementById("payatlas-tg-name")
+.innerText =
+username;
 
-avatar.src=user.photo_url;
 
-bigAvatar.src=user.photo_url;
+
+if(payatlasUser.photo_url){
+
+
+document
+.getElementById("payatlas-tg-avatar")
+.src =
+payatlasUser.photo_url;
+
 
 }
 
 
+
+}
+
+else{
+
+
+document
+.getElementById("payatlas-tg-name")
+.innerText =
+"@username";
+
+
 }
 
 
 
-function openProfile(){
 
 
-home.style.display="none";
+// =============================
+// OPEN PROFILE
+// =============================
 
-profile.style.display="block";
 
 
-if(user){
+function payatlasOpenProfile(){
 
-profileName.innerText =
-user.username
+
+
+document
+.getElementById("payatlas-home-screen")
+.style.display="none";
+
+
+
+document
+.getElementById("payatlas-profile-screen")
+.style.display="block";
+
+
+
+
+if(payatlasUser){
+
+
+
+const username =
+
+payatlasUser.username
+
 ?
-"@" + user.username
+
+"@" + payatlasUser.username
+
 :
-user.first_name;
+
+payatlasUser.first_name;
 
 
-tgid.innerText=user.id;
+
+document
+.getElementById("payatlas-profile-name")
+.innerText =
+username;
+
+
+
+document
+.getElementById("payatlas-profile-id")
+.innerText =
+payatlasUser.id;
+
+
+
+
+if(payatlasUser.photo_url){
+
+
+document
+.getElementById("payatlas-profile-avatar")
+.src =
+payatlasUser.photo_url;
+
+
+}
+
+
 
 }
 
@@ -399,52 +1588,62 @@ tgid.innerText=user.id;
 
 
 
-function closeProfile(){
 
-profile.style.display="none";
 
-home.style.display="block";
+// =============================
+// BACK HOME
+// =============================
+
+
+
+function payatlasCloseProfile(){
+
+
+
+document
+.getElementById("payatlas-profile-screen")
+.style.display="none";
+
+
+
+document
+.getElementById("payatlas-home-screen")
+.style.display="block";
+
+
+
+}
+
+
+
+
+
+// =============================
+// WALLET
+// =============================
+
+
+
+function payatlasConnectWallet(){
+
+
+
+console.log(
+"TON CONNECT READY"
+);
+
+
 
 }
 
 
 
-let tonConnectUI;
-
-
-async function connectWallet(){
-
-try{
-
-if(!tonConnectUI){
-
-tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-
-manifestUrl:
-"https://brainhrcomcast-a11y.github.io/payatlas-connect/tonconnect-manifest.json"
-
-});
-
-}
-
-
-await tonConnectUI.openModal();
-
-
-}catch(e){
-
-console.log(e);
-
-alert("Ошибка подключения кошелька");
-
-}
-
-}
 
 
 
 </script>
 
+</div>
 
-</body>
-</html>
+
+</div>
